@@ -34,8 +34,8 @@
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/EduCross.git
-cd EduCross
+git clone https://github.com/yourusername/PM_FP.git
+cd PM_FP
 ```
 
 ### 2. Configure Environment
