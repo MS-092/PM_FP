@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/global.css';
+import { setAccessToken } from '../utils/tokenService';
 
 const GradCapIcon = () => (
     <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -32,7 +33,8 @@ export default function Auth() {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/${isLogin ? 'login' : 'register'}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email, password })
+                body: JSON.stringify({ username, email, password }),
+                credentials: "include"
             });
 
             const data = await response.json();
@@ -42,7 +44,8 @@ export default function Auth() {
             }
 
             // Save user info
-            localStorage.setItem('user', JSON.stringify(data));
+            localStorage.setItem('user', JSON.stringify({_id: data._id, username: data.username, email: data.email}));
+            setAccessToken(data.accessToken)
             navigate('/dashboard');
         } catch (err) {
             setError(err.message);

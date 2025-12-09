@@ -4,6 +4,7 @@ import { generateLevel } from '../utils/generator';
 import CrosswordGrid from '../components/CrosswordGrid';
 import CluePanel from '../components/CluePanel';
 import '../styles/global.css';
+import { getAccessToken } from '../utils/tokenService';
 
 export default function Game() {
     const { category } = useParams();
@@ -139,7 +140,7 @@ export default function Game() {
         return displayGrid;
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async() => {
         const wordObj = getActiveWord();
         if (!wordObj) return;
 
@@ -157,17 +158,24 @@ export default function Game() {
                     clearInterval(timerRef.current);
                     // Save Score if user is logged in
                     const savedUser = localStorage.getItem('user');
+                    const accessToken = getAccessToken()
+
                     if (savedUser) {
-                        const user = JSON.parse(savedUser);
-                        fetch(`${import.meta.env.VITE_API_URL}/api/score`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                userId: user._id || 1, // Fallback if mock user from before
-                                category: category,
-                                score: score + 100 // Include the final word points
+                        try{
+                            const user = JSON.parse(savedUser);
+                            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/score`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
+                                body: JSON.stringify({
+                                    userId: user._id || 1, // Fallback if mock user from before
+                                    category: category,
+                                    score: score + 100 // Include the final word points
+                                }),
+                                credentials: "include"
                             })
-                        }).catch(err => console.error("Failed to save score", err));
+                        }catch(err){
+                            console.error("Failed to save score", err)
+                        }
                     }
                 }
             }
