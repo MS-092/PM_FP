@@ -146,7 +146,7 @@ router.post("/logout", async(req, res) => {
 })
 
 const generateAccessToken = (payload) => {
-    const newAccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "10s"})
+    const newAccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "15m"})
     return newAccessToken
 }
 
