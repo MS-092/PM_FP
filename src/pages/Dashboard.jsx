@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/global.css';
+import { setAccessToken } from '../utils/tokenService';
+import { api } from '../api/axios';
 
 const subjects = [
     {
@@ -64,8 +66,10 @@ export default function Dashboard() {
         }
     }, []);
 
-    const handleLogout = () => {
+    const handleLogout = async() => {
+        await api.post("/logout");
         localStorage.removeItem('user');
+        setAccessToken(null)
         navigate('/');
     };
 

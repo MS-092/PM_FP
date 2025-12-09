@@ -5,6 +5,8 @@ import CrosswordGrid from '../components/CrosswordGrid';
 import CluePanel from '../components/CluePanel';
 import '../styles/global.css';
 import { getAccessToken } from '../utils/tokenService';
+import { api } from '../api/axios';
+import toast from 'react-hot-toast';
 
 export default function Game() {
     const { category } = useParams();
@@ -163,15 +165,12 @@ export default function Game() {
                     if (savedUser) {
                         try{
                             const user = JSON.parse(savedUser);
-                            const res = await fetch(`${import.meta.env.VITE_API_URL}/api/score`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` },
-                                body: JSON.stringify({
-                                    userId: user._id || 1, // Fallback if mock user from before
-                                    category: category,
-                                    score: score + 100 // Include the final word points
-                                }),
-                                credentials: "include"
+                            const res = await api.post("/score", {
+                                userId: user._id || 1,
+                                category: category,
+                                score: score + 100
+                            }, {
+                                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${accessToken}` }
                             })
                         }catch(err){
                             console.error("Failed to save score", err)
@@ -180,9 +179,8 @@ export default function Game() {
                 }
             }
         } else {
-            // Wrong
-            // Maybe shake effect?
-            alert("Incorrect!"); // Simple feedback for now
+            toast.dismiss()
+            toast.error("Incorrect")
             setScore(s => Math.max(0, s - 10));
         }
     };

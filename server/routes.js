@@ -16,7 +16,10 @@ const validateToken = async(req, res, next) => {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
         return next()
     }catch(err){
-        return res.status(500).json({message: err.message});
+        if (err.name === "TokenExpiredError") {
+            return res.status(401).json({ message: "Token expired" });
+        }
+        else return res.status(500).json({message: err.message});
     }
 }
 
@@ -110,8 +113,40 @@ router.get('/scores/:userId', validateToken, async(req, res) => {
     }
 });
 
+router.post('/refreshToken', async(req, res) => {
+    const refreshToken = req.cookies?.refreshToken
+    if (!refreshToken){
+        return res.status(401).json({message: "Refresh token required"})
+    }
+    try{
+        const payload = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+        const newPayload = {_id: payload._id, username: payload.username, email: payload.email}
+        const newAccessToken = generateAccessToken(newPayload);
+        const newRefreshToken = generateRefreshToken(newPayload);
+
+        res.cookie("refreshToken", newRefreshToken, {
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            secure: true,
+            sameSite: "lax"
+        })
+        return res.status(200).json(newAccessToken);
+    }catch(err){
+        return res.status(500).json({message: "Invalid refresh token"});
+    }
+})
+
+router.post("/logout", async(req, res) => {
+    try{
+        res.clearCookie("refreshToken");
+        return res.status(200).json({message: "Logged out successfully!"})
+    }catch(err){
+        return res.status(500).json({message: err.message});
+    }
+})
+
 const generateAccessToken = (payload) => {
-    const newAccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "15m"})
+    const newAccessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {expiresIn: "10s"})
     return newAccessToken
 }
 
