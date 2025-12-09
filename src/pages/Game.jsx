@@ -163,7 +163,7 @@ export default function Game() {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({
-                                userId: user.id || 1, // Fallback if mock user from before
+                                userId: user._id || 1, // Fallback if mock user from before
                                 category: category,
                                 score: score + 100 // Include the final word points
                             })
