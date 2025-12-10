@@ -1,5 +1,6 @@
 import axios from "axios";
 import toast from "react-hot-toast";
+import { setAccessToken } from "../utils/tokenService";
 
 export const api = axios.create({
     baseURL: `${import.meta.env.VITE_API_URL}/api`,
@@ -20,6 +21,7 @@ api.interceptors.response.use(
                 console.log("Token Refreshed!");
 
                 const newAccessToken = res.data;
+                setAccessToken(newAccessToken);
                 config.headers.Authorization = `Bearer ${newAccessToken}`
 
                 return api(config)
