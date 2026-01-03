@@ -44,7 +44,7 @@ router.post('/register', async(req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000,
             httpOnly: true,
             secure: true,
-            sameSite: "lax"
+            sameSite: "none"
         })
 
         return res.status(200).json({_id: user._id, username: user.username, email: user.email, accessToken: accessToken});  
@@ -73,7 +73,7 @@ router.post('/login', async(req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000,
             httpOnly: true,
             secure: true,
-            sameSite: "lax"
+            sameSite: "none"
         })
 
         return res.status(200).json({_id: user._id, username: user.username, email: user.email, accessToken: accessToken});
@@ -128,7 +128,7 @@ router.post('/refreshToken', async(req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000,
             httpOnly: true,
             secure: true,
-            sameSite: "lax"
+            sameSite: "none"
         })
         return res.status(200).json(newAccessToken);
     }catch(err){
