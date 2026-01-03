@@ -44,7 +44,7 @@ router.post('/register', async(req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000,
             httpOnly: true,
             secure: true,
-            sameSite: "none"
+            sameSite: "None"
         })
 
         return res.status(200).json({_id: user._id, username: user.username, email: user.email, accessToken: accessToken});  
@@ -73,7 +73,7 @@ router.post('/login', async(req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000,
             httpOnly: true,
             secure: true,
-            sameSite: "none"
+            sameSite: "None"
         })
 
         return res.status(200).json({_id: user._id, username: user.username, email: user.email, accessToken: accessToken});
@@ -128,7 +128,7 @@ router.post('/refreshToken', async(req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000,
             httpOnly: true,
             secure: true,
-            sameSite: "none"
+            sameSite: "None"
         })
         return res.status(200).json(newAccessToken);
     }catch(err){
@@ -138,7 +138,11 @@ router.post('/refreshToken', async(req, res) => {
 
 router.post("/logout", async(req, res) => {
     try{
-        res.clearCookie("refreshToken");
+        res.clearCookie("refreshToken", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "None"
+        });
         return res.status(200).json({message: "Logged out successfully!"})
     }catch(err){
         return res.status(500).json({message: err.message});
