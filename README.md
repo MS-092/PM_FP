@@ -1,64 +1,61 @@
 # EduCross - Educational Crossword App
 
-**EduCross** is a gamified learning platform that generates infinite crossword puzzles to help students master terminology in Science, Math, English, and History. Built with a modern **React** frontend and a robust **Node.js/MongoDB** backend.
+**EduCross** is a gamified learning platform that generates infinite crossword puzzles to help students master terminology in Science, Math, English, and History. Built with a modern **React** frontend and a local **Node.js/SQLite** backend.
 
-## 🚀 Recent Updates
+## 🚀 Features
 
-- **Database Migration**: Switched from SQLite to **MongoDB** for better scalability and cloud deployment.
-- **Enhanced Security**: Implemented **Access & Refresh Token** authentication.
-- **Silent Refresh**: Frontend now automatically handles token expiration via Axios interceptors.
-- **Deployment Ready**: Added configurations for seamless deployment on **Vercel**.
+- **Infinite Replayability**: Procedural generation algorithm ensures a unique 12x12 grid every time you play.
+- **Subject Mastery**: 
+  - 🔬 **Science Starter**: Biology, Chemistry, Physics terms.
+  - 📐 **Math Builder**: Geometry, Algebra, Arithmetic concepts.
+  - 📚 **English Master**: Grammar, Poetry, Literature vocab.
+  - 🏛️ **History Quest**: Civilizations, Leaders, Eras.
+- **Gamified Experience**:
+  - ⏱️ **Timer & Scoring**: Earn points for speed and accuracy.
+  - 💡 **Smart Hint System**: Reveal single missing letters (-10 points) without spoiling the whole word.
+  - 🏆 **Progress Tracking**: Your scores are saved locally to track improvement.
+- **Modern UI/UX**:
+  - Dark Mode with Neon accents.
+  - Fully responsive design (Mobile & Desktop).
+  - Interactive Grid and Clue List.
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React, Vite, Axios, React Router DOM, Vanilla CSS.
-- **Backend**: Node.js, Express, Mongoose, CORS, Cookie-parser.
-- **Database**: MongoDB (Atlas or Local).
-- **Security**: JWT (Access/Refresh Tokens), bcryptjs (Password hashing), HttpOnly Cookies.
+- **Frontend**: React, Vite, React Router DOM, Vanilla CSS (Variables & Responsive Grid).
+- **Backend**: Node.js, Express, CORS.
+- **Database**: SQLite (Local persistence for users and scores).
+- **Security**: bcryptjs (Password hashing), .env (Environment config).
 
 ## ⚙️ Installation & Setup
 
 ### Prerequisites
-- Node.js (v18+ recommended)
-- MongoDB (Atlas account or local installation)
+- Node.js (v14+ recommended)
 - npm or yarn
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/MS-092/PM_FP.git
+git clone https://github.com/yourusername/PM_FP.git
 cd PM_FP
 ```
 
-### 2. Configure Environment Variables
-
-#### Backend (`server/.env`)
-Create a `.env` file in the `server` directory:
-```env
-MONGODB_URL=your_mongodb_connection_string
-ACCESS_TOKEN_SECRET=your_access_token_secret
-REFRESH_TOKEN_SECRET=your_refresh_token_secret
-FRONTEND_URL=http://localhost:5173
+### 2. Configure Environment
+Copy the example environment file and set up your variables:
+```bash
+cp .env.example .env
 ```
-
-#### Frontend (`client/.env`)
-Create a `.env` file in the `client` directory:
-```env
-VITE_API_URL=http://localhost:3000
-```
+*Note: Default `VITE_API_URL` is `http://localhost:3000`.*
 
 ### 3. Setup Backend
 Install dependencies and start the server:
 ```bash
-cd server
-npm install
-npm run server
+npm install express cors sqlite3 bcryptjs jsonwebtoken dotenv
+node server/index.js
 ```
-The server will run on **http://localhost:3000**.
+The server will run on **http://localhost:3000** and create a local `server/database.sqlite` file.
 
 ### 4. Setup Frontend
-Install frontend dependencies and start the development server:
+Open a new terminal, install frontend dependencies, and start the development server:
 ```bash
-cd client
 npm install
 npm run dev
 ```
@@ -66,7 +63,7 @@ The application will be available at **http://localhost:5173**.
 
 ## 🎮 How to Play
 
-1.  **Register/Login**: Create an account. Your session will be securely managed with rotating tokens.
+1.  **Register/Login**: Create an account to save your high scores.
 2.  **Select a Subject**: Choose your difficulty and topic from the Dashboard.
 3.  **Solve the Puzzle**:
     - Click a clue in the list OR tap a cell on the grid to highlight the word.
